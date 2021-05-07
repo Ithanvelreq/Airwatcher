@@ -38,6 +38,8 @@ int getHour();
 int getMinute();
 int getSeconde();
 
+void display();
+
 int operator<(Timestamp ts);
 
 int operator>(Timestamp ts);
@@ -45,7 +47,7 @@ int operator>(Timestamp ts);
 int operator==(Timestamp ts);
 
 //-------------------------------------------- Constructeurs - destructeur
-	Timestamp(int y, int mo, int d, int h, int mi, int s);
+	Timestamp(int y, int mo, int d, int h=12, int mi=0, int s=0);
 	//Constructeur de la classe Timestamp
 
 	~Timestamp();

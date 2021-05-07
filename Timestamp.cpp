@@ -12,7 +12,8 @@
 
 //-------------------------------------------------------- Include système
 #include <string>
-
+#include <iostream>
+using namespace std;
 //------------------------------------------------------ Include personnel
 #include "Timestamp.h"
 //------------------------------------------------------------- Constantes
@@ -36,6 +37,10 @@ int Timestamp::getMinute(){
 }
 int Timestamp::getSeconde(){
 	return seconde;
+}
+void Timestamp::display(){
+	cout << "annee: " << year << ", mois: " << month << ", jour: "<< day;
+	cout << ", heure: " << hour << ", minute: " << minute << ", seconde: " << seconde << endl;
 }
 
 
