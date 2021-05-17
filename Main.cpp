@@ -49,6 +49,7 @@ int main()
             date = obtenirDate(strdate);
 
             cout << "lat" << lat << " lon "<<lon<<" R "<< rayon<< " date ";
+            //pour l'instant affiche -1 si il y a un probleme lors de la saisie
             if (date!= nullptr){
                 date->display();
                 delete date; // if not null
