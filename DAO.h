@@ -38,7 +38,7 @@ public:
 //----------------------------------------------------- M�thodes publiques
     vector<string> selectionnerCapteur(double latitude,double longitude,double rayon);
     vector<Mesure> obtenirBonneMesure(string dateAtt,vector<string> capteurs);
-
+    Sensor trouverCapteurParId(string id);
     
     // Mode d'emploi :
     //

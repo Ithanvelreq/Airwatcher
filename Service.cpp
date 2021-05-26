@@ -27,9 +27,12 @@ using namespace std;
 //-------------------------------------------------------- Fonctions amies
 
 //----------------------------------------------------- M�thodes publiques
-    double Service::trouverIndiceAtmo(double latitude, double longitude, double rayon, string date){
+    string Service::trouverIndiceAtmo(double latitude, double longitude, double rayon, string date){
         DAO dao;
-        vector<string> capteurs = dao.selectionnerCapteur(latitude, longitude, rayon);
+        vector<Sensor> capteurs = dao.selectionnerCapteur(latitude, longitude, rayon);
+        if(capteurs.empty()){
+            return "pas de capteurs dans la zone choisie";
+        }
         vector<Mesure> mesures = dao.obtenirBonneMesure(date, capteurs);
         return calculerIndiceAtmo(mesures);
     }
@@ -72,9 +75,13 @@ Service::~Service ( )
 //----------------------------------------------------- M�thodes prot�g�es
 
 //------------------------------------------------------- M�thodes priv�es
-double  Service::calculerIndiceAtmo(vector<Mesure> mesures){
+string  Service::calculerIndiceAtmo(vector<Mesure> mesures){
     // Algorithme :
     //
+    if(mesures.empty()){
+        return "pas de mesure valide dans la zone choisie";
+    }
+
     double sommeO3=0;
     double sommeNO2=0;
     double sommeSO2=0;
