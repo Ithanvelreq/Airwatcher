@@ -1,12 +1,15 @@
 CC=g++
 CFLAGS=
-EXEC=main
+EXEC=test
 
-$(EXEC): Decoder.o Manager.o $(EXEC).o
-	$(CC) -o $(EXEC) $(EXEC).o Manager.o Decoder.o $(CFLAGS)
-	
+$(EXEC): Mesure.o Service.o DAO.o $(EXEC).o
+	$(CC) -o $(EXEC) $(EXEC).o Mesure.o Service.o DAO.o$(CFLAGS)
+
 %.o: %.cpp %.h
 	$(CC) -o $@ -c $< $(CFLAGS)
 
+$(EXEC).o: $(EXEC).cpp
+	$(CC) -o $@ -c $< $(CFLAGS)
+
 clean:
-	rm -f main *.o
+	rm -f *.o
