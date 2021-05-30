@@ -38,8 +38,8 @@ class DAO
 
 public:
 //----------------------------------------------------- M�thodes publiques
-    vector<string> selectionnerCapteur(double latitude,double longitude,double rayon);
-    vector<Mesure> obtenirBonneMesure(string dateAtt,vector<string> capteurs);
+    vector<Sensor> selectionnerCapteur(double latitude,double longitude,double rayon);
+    vector<Mesure> obtenirBonneMesure(string dateAtt,vector<Sensor> capteurs);
     Sensor trouverCapteurParId(string id);
     Attribut chercherAttributParId(string attributeID);
     

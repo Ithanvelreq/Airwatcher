@@ -36,10 +36,16 @@ public:
 string getSensorID();
 double getLatitude();
 double getLongitude();
+void setID(string id);
+void setLatitude(double la);
+void setLongitude(double lo);
 
 //-------------------------------------------- Constructeurs - destructeur
 	Sensor(string id, double la, double lo);
 	//Constructeur de la classe Sensor
+
+	Sensor();
+	//Constructeur par defaut
 
 	~Sensor();
 	//Destructeur de la classe Sensor

@@ -11,6 +11,8 @@
 
 //--------------------------------------------------- Interfaces utilis�es
 #include "DAO.h"
+#include "Sensor.h"
+#include "Mesure.h"
 //------------------------------------------------------------- Constantes 
 
 //------------------------------------------------------------------ Types 
@@ -27,7 +29,7 @@ class Service
 
 public:
 //----------------------------------------------------- M�thodes publiques
-    double  trouverIndiceAtmo(double latitude, double longitude, double rayon, string date);
+    void trouverIndiceAtmo(double latitude, double longitude, double rayon, string date);
     // type M�thode ( liste de param�tres );
     // Mode d'emploi :
     //
@@ -63,7 +65,7 @@ protected:
 
 private:
 //------------------------------------------------------- M�thodes priv�es
-    double  calculerIndiceAtmo(vector<Mesure> mesure);
+    void calculerIndiceAtmo(vector<Mesure> mesure);
         // type M�thode ( liste de param�tres );
         // Mode d'emploi :
         //

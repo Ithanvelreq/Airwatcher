@@ -31,7 +31,7 @@ using namespace std;
         DAO dao;
         vector<Sensor> capteurs = dao.selectionnerCapteur(latitude, longitude, rayon);
         if(capteurs.empty()){
-            return "pas de capteurs dans la zone choisie";
+            cout<<"pas de capteurs dans la zone choisie"<<endl;
         }
         vector<Mesure> mesures = dao.obtenirBonneMesure(date, capteurs);
         return calculerIndiceAtmo(mesures);
@@ -75,11 +75,11 @@ Service::~Service ( )
 //----------------------------------------------------- M�thodes prot�g�es
 
 //------------------------------------------------------- M�thodes priv�es
-string  Service::calculerIndiceAtmo(vector<Mesure> mesures){
+void Service::calculerIndiceAtmo(vector<Mesure> mesures){
     // Algorithme :
     //
     if(mesures.empty()){
-        return "pas de mesure valide dans la zone choisie";
+        cout<< "pas de mesure valide dans la zone choisie"<<endl;
     }
 
     double sommeO3=0;
@@ -91,42 +91,64 @@ string  Service::calculerIndiceAtmo(vector<Mesure> mesures){
     int nbSO2=0;
     int nbPM0=0;
 
+	string unite1;
+	string unite2;
+	string unite3;
+	string unite4;
 
     for(int i(0);i<mesures.size();i++){
-        if(mesures[i].getAttributeID()=="O3"){
+        if(mesures[i].getAttribut().getID()=="O3"){
             sommeO3=sommeO3 + mesures[i].getValue();
             nbO3++;
-
-        }else if(mesures[i].getAttributeID()=="NO2"){
+		unite1 = mesures[i].getAttribut().getUnite();
+        }else if(mesures[i].getAttribut().getID()=="NO2"){
             sommeNO2=sommeNO2+mesures[i].getValue();
             nbNO2++;
-
-        }else if(mesures[i].getAttributeID()=="SO2"){
+		unite2 = mesures[i].getAttribut().getUnite();
+        }else if(mesures[i].getAttribut().getID()=="SO2"){
             sommeSO2=sommeSO2+mesures[i].getValue();
             nbSO2++;
-
-        }else if (mesures[i].getAttributeID()=="PM10"){
+		unite3 = mesures[i].getAttribut().getUnite();
+        }else if (mesures[i].getAttribut().getID()=="PM10"){
             sommePm10=sommePm10+mesures[i].getValue();
             nbPM0++;
-
+		unite4 = mesures[i].getAttribut().getUnite();
         }
 
     }
+
     double moyenneO3=sommeO3/nbO3;
     double moyenneNo2=sommeNO2/nbNO2;
     double moyenneSO2=sommeSO2/nbSO2;
     double moyennePM10=sommePm10/nbPM0;
-
+    
     cout<<"moyenneO3:" <<moyenneO3<<endl;
     cout<<"moyenneSO2:" <<moyenneSO2<<endl;
     cout<<"moyennePM10:" <<moyennePM10<<endl;
     cout<<"moyenneNO2:" <<moyenneNo2<<endl;
 
+	string temp1;
+	string temp2;
+
     double maxi1=max(moyenneNo2,moyenneO3);
+	if(maxi1 == moyenneO3)
+		temp1 = unite1;
+	else
+		temp1 = unite2;
     double maxi2=max(moyenneSO2,moyennePM10);
+	if(maxi2 == moyenneSO2)
+		temp2 = unite3;
+	else
+		temp2 = unite4;
+
+	string uniteFinale;
     double maxi=max(maxi1,maxi2);
-    cout<<"le maxi est "<<maxi<<endl;
-    return maxi;
+	if(maxi == maxi1)
+		uniteFinale = temp1;
+	else
+		uniteFinale = temp2;
+
+    cout<<"l'indice ATMO est "<<maxi<<" "<<uniteFinale<<endl;
 
 
 }//----- Fin de M�thode
