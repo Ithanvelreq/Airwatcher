@@ -11,6 +11,8 @@
 
 //--------------------------------------------------- Interfaces utilis�es
 #include "Mesure.h"
+#include "Sensor.h"
+#include "Attribut.h"
 #include <string>
 #include <iostream>
 #include <cmath>
@@ -39,6 +41,7 @@ public:
     vector<string> selectionnerCapteur(double latitude,double longitude,double rayon);
     vector<Mesure> obtenirBonneMesure(string dateAtt,vector<string> capteurs);
     Sensor trouverCapteurParId(string id);
+    Attribut chercherAttributParId(string attributeID);
     
     // Mode d'emploi :
     //

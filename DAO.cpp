@@ -15,14 +15,7 @@ using namespace std;
 
 //------------------------------------------------------ Include personnel
 #include "DAO.h"
-#include <iostream>
-#include <cmath>
-#include <fstream>
-#include "vector"
-#include <string>
-#include <algorithm>
 #define PI 3.141592
-using namespace std;
 //------------------------------------------------------------- Constantes
 
 //---------------------------------------------------- Variables de classe
@@ -140,7 +133,8 @@ vector<Mesure> DAO::obtenirBonneMesure(string dateAtt,vector<string> capteurs){
             }
 
            value= atof(value1.c_str());
-            Mesure mesure(date, sensorID, attributeID, value);
+            Attribut attribut = chercherAttributParId(attributeID);
+            Mesure mesure(date, sensorID, value, attribut);
             mesures.push_back(mesure);
         }
 
@@ -157,6 +151,90 @@ vector<Mesure> DAO::obtenirBonneMesure(string dateAtt,vector<string> capteurs){
     return mesures;
 }//Fin de la methode
 
+//Chercher un attribut à partir de son ID
+Attribut DAO::chercherAttributParId(string AttributeID){
+	ifstream attributCSV("../dataset/attributes.csv");
+	string ligne;
+	Attribut attribut;
+	if(attributCSV){
+		while(getline(attributCSV, ligne)){
+			string::iterator it = ligne.begin();
+			string attID;
+			while (*it != ';') {
+				attID.insert(attID.end(), *it);
+		        	it++;
+		    	}
+			it++;
+			if(attID!=AttributeID){
+		        	continue;
+		    	}
+			string unit;
+			while (*it != ';') {
+				unit.insert(unit.end(), *it);
+		        	it++;
+		    	}
+			it++;
+			string description;
+			while (*it != ';') {
+				description.insert(description.end(), *it);
+		        	it++;
+		    	}
+			attribut.setID(attID);
+			attribut.setUnite(unit);
+			attribut.setDescription(description);
+		}
+	}else{
+		cout << "ERREUR: Impossible d'ouvrir le fichier en lecture." << endl;
+	}
+	return attribut;
+}
+
+Sensor DAO::trouverCapteurParId(string idCapteur){
+    ifstream capteur ("../dataset/sensors.csv");  //Ouverture d'un fichier en lecture
+    if(capteur) {
+        //Tout est prêt pour la lecture.
+        string ligne;
+        while (getline(capteur, ligne)) //Tant qu'on n'est pas à la fin, on lit
+        {
+            //On lit une ligne complète
+            string::iterator it = ligne.begin();
+            string sensorID;
+            double lat;
+            double longi;
+            while (*it != ';') {
+                sensorID.insert(sensorID.end(), *it);
+                it++;
+            }
+            if(sensorID != idCapteur){
+                continue;
+            }
+            it++;
+            string lat1;
+            while (*it != ';') {
+
+                lat1.insert(lat1.end(), *it);
+                it++;
+            }
+            it++;
+            string lon1;
+            while (*it != ';') {
+
+                lon1.insert(lon1.end(), *it);
+                it++;
+            }
+
+            lat = atof(lat1.c_str());
+            longi = atof(lon1.c_str());
+
+            Sensor capteur = new Sensor(sensorID, lat, longi);
+            return capteur;
+        }
+    }
+    else
+    {
+        cout << "ERREUR: Impossible d'ouvrir le fichier en lecture." << endl;
+    }
+}//Fin de la methode
 
 //------------------------------------------------- Surcharge d'op�rateurs
 //-------------------------------------------- Constructeurs - destructeur
@@ -216,51 +294,6 @@ double DAO::distanceEntre2points(double lat_a_degre, double lon_a_degre, double 
     return h;
 }
 
-Sensor DAO::trouverCapteurParId(string idCapteur){
-    ifstream capteur ("../dataset/sensors.csv");  //Ouverture d'un fichier en lecture
-    if(capteur) {
-        //Tout est prêt pour la lecture.
-        string ligne;
-        while (getline(capteur, ligne)) //Tant qu'on n'est pas à la fin, on lit
-        {
-            //On lit une ligne complète
-            string::iterator it = ligne.begin();
-            string sensorID;
-            double lat;
-            double longi;
-            while (*it != ';') {
-                sensorID.insert(sensorID.end(), *it);
-                it++;
-            }
-            if(sensorID != idCapteur){
-                continue;
-            }
-            it++;
-            string lat1;
-            while (*it != ';') {
 
-                lat1.insert(lat1.end(), *it);
-                it++;
-            }
-            it++;
-            string lon1;
-            while (*it != ';') {
-
-                lon1.insert(lon1.end(), *it);
-                it++;
-            }
-
-            lat = atof(lat1.c_str());
-            longi = atof(lon1.c_str());
-
-            Sensor capteur = new Sensor(sensorID, lat, longi);
-            return capteur;
-        }
-    }
-    else
-    {
-        cout << "ERREUR: Impossible d'ouvrir le fichier en lecture." << endl;
-    }
-}//Fin de la methode
 
 

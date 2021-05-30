@@ -26,8 +26,8 @@ string Mesure::getDate(){
 string Mesure::getSensorID(){
 	return sensorID;
 }
-string Mesure::getAttributeID(){
-	return attributeID;
+Attribut Mesure::getAttribut(){
+	return typeMesure;
 }
 double Mesure::getValue(){
 	return value;
@@ -35,14 +35,14 @@ double Mesure::getValue(){
 
 //-------------------------------------------- Constructeurs - destructeur
 
-Mesure::Mesure( string d, string capteur, string attribut, double valeur)
+Mesure::Mesure( string d, string capteur, double valeur , Attribut attribut)
 {
 	#ifdef MAP
 		cout << "Appel au constructeur de <Mesure>" << endl;
 	#endif
 	date = d;
 	sensorID = capteur;
-	attributeID = attribut;
+	typeMesure = attribut;
 	value = valeur;
 } //----- Fin de Mesure
 
