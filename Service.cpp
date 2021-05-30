@@ -27,7 +27,7 @@ using namespace std;
 //-------------------------------------------------------- Fonctions amies
 
 //----------------------------------------------------- M�thodes publiques
-    string Service::trouverIndiceAtmo(double latitude, double longitude, double rayon, string date){
+    void Service::trouverIndiceAtmo(double latitude, double longitude, double rayon, string date){
         DAO dao;
         vector<Sensor> capteurs = dao.selectionnerCapteur(latitude, longitude, rayon);
         if(capteurs.empty()){
