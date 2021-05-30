@@ -18,7 +18,9 @@
 #include <cmath>
 #include <fstream>
 #include "vector"
+#include "map"
 #include "Mesure.h"
+#include "Sensor.h"
 #include <algorithm>
 #define PI 3.141592
 using namespace std;

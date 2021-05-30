@@ -36,6 +36,13 @@ public:
     // Contrat :
     //
 
+    int trouverCapteurDef(string id);
+    // type M�thode ( liste de param�tres );
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
 
 //------------------------------------------------- Surcharge d'op�rateurs
 
@@ -65,12 +72,12 @@ protected:
 
 private:
 //------------------------------------------------------- M�thodes priv�es
-    void calculerIndiceAtmo(vector<Mesure> mesure);
-        // type M�thode ( liste de param�tres );
-        // Mode d'emploi :
-        //
-        // Contrat :
-        //
+map<string, double> Service::calculerMoyenneParElement(vector<Mesure> mesures);
+    // type M�thode ( liste de param�tres );
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
 
 protected:
 //----------------------------------------------------- Attributs prot�g�s
