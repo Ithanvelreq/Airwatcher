@@ -13,6 +13,7 @@
 #include "Mesure.h"
 #include "Sensor.h"
 #include "Attribut.h"
+#include "Particulier.h"
 #include <string>
 #include <iostream>
 #include <cmath>
@@ -44,6 +45,7 @@ public:
     vector<Mesure> obtenirBonneMesure(string dateAtt,vector<Sensor> capteurs);
     Sensor trouverCapteurParId(string id);
     Attribut chercherAttributParId(string attributeID);
+    vector<Particulier> obtenirParticuliers();
     
     // Mode d'emploi :
     //

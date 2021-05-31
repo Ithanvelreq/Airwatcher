@@ -27,21 +27,16 @@ using namespace std;
 //-------------------------------------------------------- Fonctions amies
 
 //----------------------------------------------------- M�thodes publiques
-<<<<<<< Updated upstream
-    void Service::trouverIndiceAtmo(double latitude, double longitude, double rayon, string date){
-        DAO dao;
-        vector<Sensor> capteurs = dao.selectionnerCapteur(latitude, longitude, rayon);
-        if(capteurs.empty()){
-            cout<<"pas de capteurs dans la zone choisie"<<endl;
-        }
-        vector<Mesure> mesures = dao.obtenirBonneMesure(date, capteurs);
-        return calculerIndiceAtmo(mesures);
-=======
 double Service::trouverIndiceAtmo(double latitude, double longitude, double rayon, string date){
     DAO dao;
     vector<string> capteurs = dao.selectionnerCapteur(latitude, longitude, rayon);
     vector<Mesure> mesures = dao.obtenirBonneMesure(date, capteurs);
     map<string, double> moyennes = calculerMoyenneParElement(mesures);
+
+    /*Récompenser les particuliers*/
+	vector<Particulier> particuliers = dao.obtenirParticuliers();
+	recompenserParticuliers(particuliers, mesures);
+    /*  */
 
     double maxi1=max(moyennes.find("O3")->second, moyennes.find("No2")->second);
     double maxi2=max(moyennes.find("SO2")->second,moyennes.find("PM10")->second);
@@ -90,7 +85,6 @@ int trouverCapteurDef(string id)
 
             }
         }
->>>>>>> Stashed changes
     }
 
 }
@@ -181,3 +175,17 @@ map<string, double> Service::calculerMoyenneParElement(vector<Mesure> mesures){
 
 
 }//----- Fin de M�thode
+
+void Service::recompenserParticuliers(vector<Particulier> particuliers, vector<Mesure> mesures){
+	for(int i=0; i<mesures.size(); i++){
+		for(int j=0; j<particuliers.size(); j++){
+			for(int k=0; k<particuliers[j].getSensors().size(); k++){
+				if(particuliers[j].getSensors()[k].getID() == mesures[i].getSensorID() ){
+					particuliers[j].setPoints(getPoints()+1);
+					cout << "Le particulier "<<particuliers[j].id<<" se voit attribuer un point en plus, pour un total de "<<particuliers[j].getPoints()/*particuliers[j].points*/<<endl;
+				}
+			}
+		}
+	}
+
+}

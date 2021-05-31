@@ -241,6 +241,48 @@ Sensor DAO::trouverCapteurParId(string idCapteur){
 	return sensor;
 }//Fin de la methode
 
+//Retourne la liste de tous les particuliers
+vector<Particulier> DAO::obtenirParticuliers(){
+	vector<Particulier> particuliers;
+	ifstream usersCSV("../dataset/users.csv");
+	string ligne;
+	if(usersCSV){
+		while(getline(usersCSV, ligne)){
+			string userID;
+			string sensorID;
+			string::iterator it = ligne.begin();
+			while(*it != ';'){
+				userID.insert(userID.end(), *it);
+				it++;
+			}
+			it++;			
+			while (*it != ';'){
+				sensorID.insert(sensorID.end(), *it);
+				it++;
+			}
+			int exist =0;
+			for(int i=0; i<particuliers.size(); i++){
+				if(userID == particuliers[i].getID() ){
+					Sensor sensor = trouverCapteurParId(sensorID); 
+					particuliers[i].addSensor(sensor);
+					exist=1;
+					break;
+				}
+			}
+			if(!exist){
+				Sensor sensor = trouverCapteurParId(sensorID); 
+				vector<Sensor> capteurs;
+				capteurs.push_back(sensor);
+				Particulier particulier(userID, capteurs);
+				particuliers.push_back(particulier);
+			}
+		}
+	}else{
+		cout<<	 "ERREUR: Impossible d'ouvrir le fichier en lecture." << endl;
+	}
+	return particuliers;		
+}//Fin de la methode
+
 //------------------------------------------------- Surcharge d'op�rateurs
 //-------------------------------------------- Constructeurs - destructeur
 DAO::DAO ( const DAO & unDAO )

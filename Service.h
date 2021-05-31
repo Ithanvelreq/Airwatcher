@@ -13,6 +13,7 @@
 #include "DAO.h"
 #include "Sensor.h"
 #include "Mesure.h"
+#include "Particulier.h"
 //------------------------------------------------------------- Constantes 
 
 //------------------------------------------------------------------ Types 
@@ -73,6 +74,7 @@ protected:
 private:
 //------------------------------------------------------- M�thodes priv�es
 map<string, double> Service::calculerMoyenneParElement(vector<Mesure> mesures);
+void recompenserParticuliers(vector<Particulier> particuliers, vector<Mesure> mesures);
     // type M�thode ( liste de param�tres );
     // Mode d'emploi :
     //
