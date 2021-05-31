@@ -9,14 +9,14 @@ using namespace std;
 #include "Gouvernement.h"
 #include "Particulier.h"
 #include "Provider.h"
-
+#include "Sensor.h"
+#include "Purificateur.h"
 
 int main(){
-    Utilisateur *user1 = new Utilisateur("util1");
-    delete user1;
-    struct Cleaner c1;
-    c1.cleanerId = "0001";
-    vector<Cleaner> liste = {c1};
+    Utilisateur user1("util1");
+    Sensor s1 ("s1", 100.5, 65.3);
+    Sensor s2 ("s2", 100.5, 65.3);
+    vector<Sensor> liste = {s1, s2};
     Provider* fournisseur = new Provider("p1", liste);
     delete fournisseur;
     Gouvernement* utiGouv = new Gouvernement("g1");

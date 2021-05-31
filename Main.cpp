@@ -49,20 +49,32 @@ int main()
             date = obtenirDate(strdate);
 
             cout << "lat" << lat << " lon "<<lon<<" R "<< rayon<< " date ";
-            //pour l'instant affiche -1 si il y a un probleme lors de la saisie
             if (date!= nullptr){
                 date->display();
-                delete date; // if not null
             }else{
                 cout << "probleme avec la date" << endl;
             }
+
+
+            //pour l'instant affiche -1 si il y a un probleme lors de la saisie
+            if(lat>0 && lon > 0 && rayon>0 && date!=nullptr){
+                //pas de soucis, tout est respecte on peux appeler la methode
+                delete date; // if not null
+            }else if (lat<=0 || lon <= 0){
+                cout << "Votre saisie comporte des erreurs, veuillez verifier que les coordonnes soient valides" << endl;
+            }else if(rayon<=0){
+                cout << "Le rayon doit etre superieur a 0!" << endl;
+            }else{
+                cout << "Le format de date n'est pas respecte ou la date saisie n'existe pas, veuillez verifier svp" << endl;
+            }
+
             
-        }else if(!strcmp(command, "1")){
+        }else if(!strcmp(command, "2")){
             cout << "vous avez choisi 2" << endl;
         }else if(!strcmp(command, "help")){
             rappelCommandes();
         }else if(!strcmp(command, "exit")){
-            //on sortira de l'appli
+            //on sortira de l'application
         }else{
             cout << "La commande saisie ne corresponds pas aux options disponibles, veuillez ressayer svp" << endl;
         }

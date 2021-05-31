@@ -1,3 +1,20 @@
+/*************************************************************************
+                           DAO  -  description
+                             -------------------
+    d�but                : ${date}
+    copyright            : (C) ${year} par ${user}
+*************************************************************************/
+
+//---------- R�alisation de la classe <DAO> (fichier DAO.cpp) --
+
+//---------------------------------------------------------------- INCLUDE
+
+//-------------------------------------------------------- Include syst�me
+using namespace std;
+#include <iostream>
+
+//------------------------------------------------------ Include personnel
+#include "DAO.h"
 #include <iostream>
 #include <cmath>
 #include <fstream>
@@ -6,46 +23,23 @@
 #include <algorithm>
 #define PI 3.141592
 using namespace std;
+//------------------------------------------------------------- Constantes
+
+//---------------------------------------------------- Variables de classe
+
+//----------------------------------------------------------- Types priv�s
 
 
-//Conversion des degrés en radian
-double convertRad(double input){
-    return (PI * input)/180;
-}
+//----------------------------------------------------------------- PUBLIC
+//-------------------------------------------------------- Fonctions amies
 
-
-double  distanceEntre2points(double lat_a_degre, double lon_a_degre, double lat_b_degre,double lon_b_degre){
-
-    double Latitude1 = convertRad(lat_a_degre);
-    double Longitude1 = convertRad(lon_a_degre);
-    double Latitude2 = convertRad(lat_b_degre);
-    double Longitude2= convertRad(lon_b_degre);
-
-    double d=6371;
-    double k=sin(Latitude1)*sin(Latitude2)+cos(Latitude1)*cos(Latitude2)*cos(Longitude2-Longitude1);
-            double h=d* acos(k);
-
-return h;
-}
-
-
-
-struct Mesure{
-    string date;
-    string sensorID;
-    string attributeID;
-    double value;
-
-};
-
-vector<string> selctionnerCapteur(double latitude,double longitude,double rayon){
-//récupère l'id des sensors qui nous intéresse qui sont dans le rayon demande
-    ifstream capteur ("/Users/emilienmarion/Desktop/3IF/S2/GL/dataset/sensors.csv");  //Ouverture d'un fichier en lecture
+//----------------------------------------------------- M�thodes publiques
+vector<string> DAO::selectionnerCapteur(double latitude,double longitude,double rayon){
+    //récupère l'id des sensors qui nous intéresse qui sont dans le rayon demande
+    ifstream capteur ("../dataset/sensors.csv");  //Ouverture d'un fichier en lecture
     vector<string> listecapteur;
     if(capteur) {
         //Tout est prêt pour la lecture.
-
-
         string ligne;
         while (getline(capteur, ligne)) //Tant qu'on n'est pas à la fin, on lit
         {
@@ -86,15 +80,14 @@ vector<string> selctionnerCapteur(double latitude,double longitude,double rayon)
         cout << "ERREUR: Impossible d'ouvrir le fichier en lecture." << endl;
     }
     return  listecapteur;
-}
+}//Fin de la methode
 
-//remplacer date par Time stamp
+
+//remplacer date par Time stamp?
 //vector<string> listecapteurs ,string date
 //vector<Mesure> obtenirBonneMesure(){
-vector<Mesure> obtenirBonneMesure(string dateAtt,vector<string> capteurs){
-
-
-    ifstream mesurecsv("/Users/emilienmarion/Desktop/3IF/S2/GL/dataset/measurements.csv");
+vector<Mesure> DAO::obtenirBonneMesure(string dateAtt,vector<string> capteurs){
+    ifstream mesurecsv("../dataset/measurements.csv");
     string ligne;
     vector<Mesure> mesures;
     if(mesurecsv){
@@ -147,15 +140,8 @@ vector<Mesure> obtenirBonneMesure(string dateAtt,vector<string> capteurs){
             }
 
            value= atof(value1.c_str());
-            Mesure mesure;
-            mesure.sensorID=sensorID;
-            mesure.date=date;
-            mesure.attributeID=attributeID;
-            mesure.value=value;
+            Mesure mesure(date, sensorID, attributeID, value);
             mesures.push_back(mesure);
-
-
-
         }
 
 
@@ -169,7 +155,64 @@ vector<Mesure> obtenirBonneMesure(string dateAtt,vector<string> capteurs){
 
 
     return mesures;
+}//Fin de la methode
 
 
+//------------------------------------------------- Surcharge d'op�rateurs
+//-------------------------------------------- Constructeurs - destructeur
+DAO::DAO ( const DAO & unDAO )
+// Algorithme :
+//
+{
+#ifdef MAP
+    cout << "Appel au constructeur de copie de <DAO>" << endl;
+#endif
+} //----- Fin de DAO (constructeur de copie)
 
+
+DAO::DAO ( )
+// Algorithme :
+//
+{
+#ifdef MAP
+    cout << "Appel au constructeur de <DAO>" << endl;
+#endif
+} //----- Fin de DAO
+
+
+DAO::~DAO ( )
+// Algorithme :
+//
+{
+#ifdef MAP
+    cout << "Appel au destructeur de <DAO>" << endl;
+#endif
+} //----- Fin de ~DAO
+
+
+//------------------------------------------------------------------ PRIVE
+
+//----------------------------------------------------- M�thodes prot�g�es
+
+//------------------------------------------------------- M�thodes priv�es
+
+//Conversion des degrés en radian
+double DAO::convertRad(double input){
+    return (PI * input)/180;
 }
+
+
+double DAO::distanceEntre2points(double lat_a_degre, double lon_a_degre, double lat_b_degre,double lon_b_degre){
+
+    double Latitude1 = convertRad(lat_a_degre);
+    double Longitude1 = convertRad(lon_a_degre);
+    double Latitude2 = convertRad(lat_b_degre);
+    double Longitude2= convertRad(lon_b_degre);
+
+    double d=6371;
+    double k=sin(Latitude1)*sin(Latitude2)+cos(Latitude1)*cos(Latitude2)*cos(Longitude2-Longitude1);
+    double h=d* acos(k);
+
+    return h;
+}
+

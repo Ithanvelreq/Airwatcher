@@ -16,12 +16,11 @@
 using namespace std;
 //------------------------------------------------------ Include personnel
 #include "Mesure.h"
-#include "Timestamp.h"
 //------------------------------------------------------------- Constantes
 //----------------------------------------------------------------- PUBLIC
 //----------------------------------------------------- Méthodes publiques
 
-Timestamp * Mesure::getDate(){
+string Mesure::getDate(){
 	return date;
 }
 string Mesure::getSensorID(){
@@ -36,7 +35,7 @@ double Mesure::getValue(){
 
 //-------------------------------------------- Constructeurs - destructeur
 
-Mesure::Mesure( Timestamp * d, string capteur, string attribut, double valeur)
+Mesure::Mesure( string d, string capteur, string attribut, double valeur)
 {
 	#ifdef MAP
 		cout << "Appel au constructeur de <Mesure>" << endl;

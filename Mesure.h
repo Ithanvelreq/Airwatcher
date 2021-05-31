@@ -11,7 +11,6 @@
 #if ! defined ( MESURE_H )
 #define MESURE_H
 //--------------------------------------------------- Interfaces utilisées
-#include "Timestamp.h"
 #include <string>
 #include <iostream>
 using namespace std;
@@ -34,13 +33,13 @@ public:
 
 // type Méthode ( liste des paramètres );
 
-Timestamp * getDate();
+string getDate();
 string getSensorID();
 string getAttributeID();
 double getValue();
 
 //-------------------------------------------- Constructeurs - destructeur
-	Mesure(Timestamp * d, string capteur, string attribut, double valeur);
+	Mesure(string d, string capteur, string attribut, double valeur);
 	//Constructeur de la classe Mesure
 
 	~Mesure();
@@ -53,7 +52,7 @@ protected:
 
 //----------------------------------------------------- Mesures protégés
 
-	Timestamp * date;
+	string date;
 	string sensorID;
 	string attributeID;
 	double value;
