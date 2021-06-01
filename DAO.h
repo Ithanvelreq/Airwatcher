@@ -23,10 +23,13 @@
 #include "Mesure.h"
 #include "Sensor.h"
 #include <algorithm>
-#define PI 3.141592
 using namespace std;
-//------------------------------------------------------------- Constantes 
-
+//------------------------------------------------------------- Constantes
+#define PI 3.141592
+#define DATASETSENSORS "../dataset/sensors.csv"
+#define DATASETMESURES "../dataset/measurements.csv"
+#define DATASETATTRIBUTES "../dataset/attributes.csv"
+#define DATASETUSERS "../dataset/users.csv"
 //------------------------------------------------------------------ Types 
 
 //------------------------------------------------------------------------ 

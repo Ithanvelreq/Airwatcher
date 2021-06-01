@@ -15,8 +15,6 @@ using namespace std;
 
 //------------------------------------------------------ Include personnel
 #include "DAO.h"
-#include "vector"
-#define PI 3.141592
 //------------------------------------------------------------- Constantes
 
 //---------------------------------------------------- Variables de classe
@@ -30,7 +28,7 @@ using namespace std;
 //----------------------------------------------------- M�thodes publiques
 vector<Sensor> DAO::selectionnerCapteur(double latitude,double longitude,double rayon){
     //récupère l'id des sensors qui nous intéresse qui sont dans le rayon demande
-    ifstream capteur ("../dataset/sensors.csv");  //Ouverture d'un fichier en lecture
+    ifstream capteur (DATASETSENSORS);  //Ouverture d'un fichier en lecture
     vector<Sensor> listecapteur;
     if(capteur) {
         //Tout est prêt pour la lecture.
@@ -82,7 +80,7 @@ vector<Sensor> DAO::selectionnerCapteur(double latitude,double longitude,double 
 //vector<string> listecapteurs ,string date
 //vector<Mesure> obtenirBonneMesure(){
 vector<Mesure> DAO::obtenirBonneMesure(string dateAtt,vector<Sensor> capteurs){
-    ifstream mesurecsv("../dataset/measurements.csv");
+    ifstream mesurecsv(DATASETMESURES);
     string ligne;
     vector<Mesure> mesures;
     if(mesurecsv){
@@ -155,7 +153,7 @@ vector<Mesure> DAO::obtenirBonneMesure(string dateAtt,vector<Sensor> capteurs){
 
 //Chercher un attribut à partir de son ID
 Attribut DAO::chercherAttributParId(string AttributeID){
-	ifstream attributCSV("../dataset/attributes.csv");
+	ifstream attributCSV(DATASETATTRIBUTES);
 	string ligne;
 	Attribut attribut;
 	if(attributCSV){
@@ -192,7 +190,7 @@ Attribut DAO::chercherAttributParId(string AttributeID){
 }
 
 Sensor DAO::trouverCapteurParId(string idCapteur){
-    ifstream capteur ("../dataset/sensors.csv");  //Ouverture d'un fichier en lecture
+    ifstream capteur (DATASETSENSORS);  //Ouverture d'un fichier en lecture
     Sensor sensor;
     if(capteur) {
         //Tout est prêt pour la lecture.

@@ -27,27 +27,26 @@ using namespace std;
 //-------------------------------------------------------- Fonctions amies
 
 //----------------------------------------------------- M�thodes publiques
-double Service::trouverIndiceAtmo(double latitude, double longitude, double rayon, string date){
+pair<string, int> Service::trouverIndiceAtmo(double latitude, double longitude, double rayon, string date){
     DAO dao;
-    vector<string> capteurs = dao.selectionnerCapteur(latitude, longitude, rayon);
+    vector<Sensor> capteurs = dao.selectionnerCapteur(latitude, longitude, rayon);
     vector<Mesure> mesures = dao.obtenirBonneMesure(date, capteurs);
     map<string, double> moyennes = calculerMoyenneParElement(mesures);
 
     /*Récompenser les particuliers*/
 	vector<Particulier> particuliers = dao.obtenirParticuliers();
 	recompenserParticuliers(particuliers, mesures);
-    /*  */
 
-    double maxi1=max(moyennes.find("O3")->second, moyennes.find("No2")->second);
-    double maxi2=max(moyennes.find("SO2")->second,moyennes.find("PM10")->second);
-    double maxi=max(maxi1,maxi2);
-    return maxi;
+    pair<string, int> indice = indiceDeLaJournee(moyennes);
+    
+    return indice;
 }
 
-int trouverCapteurDef(string id)
+int Service::trouverCapteurDef(string id)
 {
     DAO dao;
-    Sensor evaluatedSensor = dao.trouverSensorParId(id);
+    int res = 0;
+    Sensor evaluatedSensor = dao.trouverCapteurParId(id);
     vector<Sensor> vectorSensor;
     vectorSensor.push_back(evaluatedSensor);
     double rayon = 10.0;
@@ -60,33 +59,36 @@ int trouverCapteurDef(string id)
     string lastdate = "-31-2019";
     int lastday = 12;
     string currentDate = to_string(lastday) + lastdate;
-    double ecartalamoyenne;
+    double ecartalamoyenne = 0;
+    //On calcule l'ecart a la moyenne pendant les derniers 7 jours
     while(lastday < 20){
-        vector<pair<double, string>> moyennesMesuresVoisins = calculerMoyenneParElement(dao.obtenirBonneMesure(currentDate, listeneighs));
+        map<string, double> moyennesMesuresVoisins = calculerMoyenneParElement(dao.obtenirBonneMesure(currentDate, listeneighs));
         vector<Mesure> mesuresCapteur = dao.obtenirBonneMesure(currentDate, vectorSensor);
         vector<Mesure>::iterator it;
+        //recompenserUtilisateurPrivee(mesures)
 
         for(it = mesuresCapteur.begin(); it<mesuresCapteur.end(); it++){
 
-            if(it->getAttributeID()=="O3"){
-                ecartalamoyenne = abs(it->getValue() - moyennesMesuresVoisins.find("O3")->second);
+            if(it->getAttribut().getID()=="O3"){
+                ecartalamoyenne += abs(it->getValue() - moyennesMesuresVoisins.find("O3")->second);
+            }else if(it->getAttribut().getID()=="NO2"){
+                ecartalamoyenne += abs(it->getValue() - moyennesMesuresVoisins.find("NO2")->second);
 
-            }else if(it->getAttributeID()=="NO2"){
-                sommeNO2=sommeNO2+mesures[i].getValue();
-                nbNO2++;
+            }else if(it->getAttribut().getID()=="SO2"){
+                ecartalamoyenne += abs(it->getValue() - moyennesMesuresVoisins.find("SO2")->second);
 
-            }else if(it->getAttributeID()=="SO2"){
-                sommeSO2=sommeSO2+mesures[i].getValue();
-                nbSO2++;
-
-            }else if (it->getAttributeID()=="PM10"){
-                sommePm10=sommePm10+mesures[i].getValue();
-                nbPM0++;
-
+            }else if (it->getAttribut().getID()=="PM10"){
+                ecartalamoyenne += abs(it->getValue() - moyennesMesuresVoisins.find("PM10")->second);
             }
         }
+        lastday++;
     }
 
+    if(ecartalamoyenne>SEUIL){
+        res = 1;
+    }
+
+    return res;
 }
 
 //------------------------------------------------- Surcharge d'op�rateurs
@@ -168,7 +170,7 @@ map<string, double> Service::calculerMoyenneParElement(vector<Mesure> mesures){
     double moyennePM10=sommePm10/nbPM0;
     map<string, double> res;
     res.insert(pair<string, double>("O3", moyenneO3));
-    res.insert(pair<string, double>("No2", moyenneNo2));
+    res.insert(pair<string, double>("NO2", moyenneNo2));
     res.insert(pair<string, double>("SO2", moyenneSO2));
     res.insert(pair<string, double>("PM10", moyennePM10));
     return res;
@@ -189,3 +191,46 @@ void Service::recompenserParticuliers(vector<Particulier> particuliers, vector<M
 	}
 
 }
+pair<string, int> Service::indiceDeLaJournee(map<string, double> moyennes)
+{
+    vector<double> listeIndicePourPM10{0, 10, 20, 30, 40, 50, 65, 80, 100, 125};
+    vector<double> listeIndicePourSO2{0, 40, 80, 120, 160, 200, 250, 300, 400, 500};
+    vector<double> listeIndicePourNO2{0, 30, 55, 85, 110, 135, 165, 200, 275, 400};
+    vector<double> listeIndicePourO3{0, 30, 55, 80, 105, 130, 150, 180, 210, 240};
+
+    map<string, vector<double>> listeIndices;
+    listeIndices.insert(pair<string, vector<double>>("NO2", listeIndicePourNO2));
+    listeIndices.insert(pair<string, vector<double>>("SO2", listeIndicePourSO2));
+    listeIndices.insert(pair<string, vector<double>>("PM10", listeIndicePourPM10));
+    listeIndices.insert(pair<string, vector<double>>("O3", listeIndicePourO3));
+
+    map<string, double>::iterator it;
+    int indiceCourrant = 1;
+    int indiceFinal = 1;
+    string elementfinal;
+    int fini = 0;
+    for(it = moyennes.begin(); it!=moyennes.end(); it++){
+        while(!fini){
+            cout << "seuil saturation" << listeIndices.find(it->first)->second.back()<< endl;
+            cout << "actuel encadrement" << listeIndices.find(it->first)->second[indiceCourrant-1] << " ; " << listeIndices.find(it->first)->second[indiceCourrant] << endl;
+            if(it->second >= listeIndices.find(it->first)->second.back()){
+                //saturation
+                fini = 1;
+                cout << "saturation" << it->first << "  " << it->second << "  " << indiceCourrant << endl;
+            }else if(it->second>=listeIndices.find(it->first)->second[indiceCourrant-1] && it->second<=listeIndices.find(it->first)->second[indiceCourrant]){
+                //on a trouve l'encadrement
+                fini = 1;
+                cout << "encadrement" << it->first << "  " << it->second  << "  " << indiceCourrant << endl;
+            }
+
+            if(fini && indiceCourrant>indiceFinal){
+                indiceFinal = indiceCourrant;
+                elementfinal = it->first;
+            }
+            indiceCourrant++;
+        }
+        fini = 0;
+        indiceCourrant = 1;
+    }
+    return pair<string, int>(elementfinal, indiceFinal)
+}//----- Fin de M�thode

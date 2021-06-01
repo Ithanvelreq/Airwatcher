@@ -15,7 +15,7 @@
 #include "Mesure.h"
 #include "Particulier.h"
 //------------------------------------------------------------- Constantes 
-
+#define SEUIL 10
 //------------------------------------------------------------------ Types 
 
 //------------------------------------------------------------------------ 
@@ -30,7 +30,7 @@ class Service
 
 public:
 //----------------------------------------------------- M�thodes publiques
-    void trouverIndiceAtmo(double latitude, double longitude, double rayon, string date);
+    pair<string, int> trouverIndiceAtmo(double latitude, double longitude, double rayon, string date);
     // type M�thode ( liste de param�tres );
     // Mode d'emploi :
     //
@@ -75,11 +75,13 @@ private:
 //------------------------------------------------------- M�thodes priv�es
 map<string, double> Service::calculerMoyenneParElement(vector<Mesure> mesures);
 void recompenserParticuliers(vector<Particulier> particuliers, vector<Mesure> mesures);
+map<string, double> calculerMoyenneParElement(vector<Mesure> mesures);
     // type M�thode ( liste de param�tres );
     // Mode d'emploi :
     //
     // Contrat :
     //
+pair<string, int> Service::indiceDeLaJournee(map<string, double> moyennes);
 
 protected:
 //----------------------------------------------------- Attributs prot�g�s
