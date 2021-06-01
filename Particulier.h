@@ -47,13 +47,13 @@ public:
     Particulier(string id, vector<Sensor> liste);
     // Constructeur de la classe Particulier
 
-    virtual ~Provider();
+    virtual ~Particulier();
     // Destructeur de la classe Particulier
 
 //------------------------------------------------------------------ PRIVE 
 protected:
 //----------------------------------------------------- Attributs protégés
-    vector<Purificateur> listePurifs;
+    vector<Sensor> listeSensors;
     int point;
     int banni;
 };

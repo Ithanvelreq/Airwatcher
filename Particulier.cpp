@@ -29,11 +29,11 @@ using namespace std;
 
 //----------------------------------------------------- Méthodes publiques
 vector<Sensor> Particulier:: getListe(){
-    return listeCapteurs;
+    return listeSensors;
 }//----- Fin de getListe()
 
 void Particulier:: setListe(vector<Sensor> liste){
-    copy (liste.begin(), liste.end(), listeCapteurs.begin());
+    listeSensors = liste;
 }//----- Fin de setListe()
 
 int Particulier:: getPoint(){
@@ -53,18 +53,19 @@ void Particulier:: setBanni(int b){
 }
 
 //-------------------------------------------- Constructeurs - destructeur
-Pariculier::Particulier(string id, vector<Sensor> liste):Utilisateur(id){
+Particulier::Particulier(string id, vector<Sensor> liste):Utilisateur(id)
 {
+    cout << "constructeur particulier"<<endl;
     #ifdef MAP
         cout << "Appel au constructeur de <Particulier>" << endl;
     #endif
-    copy (liste.begin(), liste.end(), listeCapteurs.begin());
+    listeSensors = liste;
     point = 0;
     banni = 0;
 } //----- Fin de Particulier
 
 
-Provider:: ~Particulier()
+Particulier:: ~Particulier()
 {
 #ifdef MAP
     cout << "Appel au destructeur de <Particulier>" << endl;

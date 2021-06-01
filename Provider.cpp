@@ -33,16 +33,16 @@ vector<Purificateur> Provider:: getListe(){
 }//----- Fin de getListe()
 
 void Provider:: setListe(vector<Purificateur> liste){
-    copy (liste.begin(), liste.end(), listePurifs.begin());
+    listePurifs = liste;
 }//----- Fin de setListe()
 
 //-------------------------------------------- Constructeurs - destructeur
-Provider::Provider(string id, vector<Purificateur> liste):Utilisateur(id){
+Provider::Provider(string id, vector<Purificateur> liste):Utilisateur(id)
 {
     #ifdef MAP
         cout << "Appel au constructeur de <Provider>" << endl;
     #endif
-    copy (liste.begin(), liste.end(), listePurifs.begin());
+    listePurifs = liste;
 } //----- Fin de Provider
 
 

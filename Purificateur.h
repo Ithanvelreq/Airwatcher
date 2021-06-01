@@ -12,6 +12,7 @@
 #define PURIFICATEUR_H
 //--------------------------------------------------- Interfaces utilisées
 #include <string>
+#include <iostream>
 using namespace std;
 //------------------------------------------------------------- Constantes
 

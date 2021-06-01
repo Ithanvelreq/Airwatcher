@@ -12,14 +12,14 @@
 //--------------------------------------------------- Interfaces utilisées
 #include <iostream>
 #include <string>
-#include <Utilisateur.h>
+#include "Utilisateur.h"
 //------------------------------------------------------------- Constantes 
 
 //------------------------------------------------------------------ Types 
 
 //------------------------------------------------------------------------ 
 // Rôle de la classe <Admin>
-//classe abstraite fille de Utilisateur qui définit un utilisateur de type administrateur
+// classe abstraite fille de Utilisateur qui définit un utilisateur de type administrateur
 //
 //------------------------------------------------------------------------ 
 
@@ -33,7 +33,7 @@ public:
     Admin(string userId);
     // Constructeur de la classe Admin
 
-    virtual ~ADmin();
+    virtual ~Admin();
     // Destructeur de la classe Admin
 };
 

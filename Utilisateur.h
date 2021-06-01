@@ -36,7 +36,7 @@ public:
 
 
 //-------------------------------------------- Constructeurs - destructeur
-    Utilisateur(string userId);
+    Utilisateur(string id, string mdp="", string email="", string n="", string p="");
     // Constructeur de la classe Utilisateur
 
     virtual ~Utilisateur();

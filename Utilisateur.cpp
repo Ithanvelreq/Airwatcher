@@ -34,16 +34,16 @@ string Utilisateur::getId()
 } //----- Fin de getId
 
 //-------------------------------------------- Constructeurs - destructeur
-Utilisateur::Utilisateur(string id){
+Utilisateur::Utilisateur(string id, string mdp, string email, string n, string p)
 {
     #ifdef MAP
         cout << "Appel au constructeur de <${file_base}>" << endl;
     #endif
     userId = id;
-    motDePasse = "mdp";
-    mail = "mail@gmail.com";
-    nom = "Diego";
-    prenom = "Maradona";
+    motDePasse = mdp;
+    mail = email;
+    nom = n;
+    prenom = p;
 } //----- Fin de Utilisateur
 
 
