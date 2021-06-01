@@ -14,6 +14,7 @@
 #include "Sensor.h"
 #include "Mesure.h"
 #include "Particulier.h"
+#include <time.h>
 //------------------------------------------------------------- Constantes 
 #define SEUIL 300
 //------------------------------------------------------------------ Types 

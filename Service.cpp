@@ -29,15 +29,31 @@ using namespace std;
 //----------------------------------------------------- M�thodes publiques
 pair<string, int> Service::trouverIndiceAtmo(double latitude, double longitude, double rayon, string date){
     DAO dao;
+    clock_t t1, t2;
+    
+    double timeMem;
+    t1 = clock();
+
     vector<Sensor> capteurs = dao.selectionnerCapteur(latitude, longitude, rayon);
     vector<Mesure> mesures = dao.obtenirBonneMesure(date, capteurs);
-    map<string, double> moyennes = calculerMoyenneParElement(mesures);
 
-    /*Récompenser les particuliers*/
-	vector<Particulier> particuliers = dao.obtenirParticuliers();
-	recompenserParticuliers(particuliers, mesures);
+    t2 = clock();
+    timeMem = (t2 - t1)/(CLOCKS_PER_SEC / (double) 1000.0);
+    cout<<"Temps en mémoire pour selectionner les capteurs et obtenir les mesures : " << timeMem<<endl;
+
+    vector<Particulier> particuliers = dao.obtenirParticuliers();
+    recompenserParticuliers(particuliers, mesures);
+
+    double timeExec;
+    t1 = clock();
+
+    map<string, double> moyennes = calculerMoyenneParElement(mesures);    
     pair<string, int> indice = indiceDeLaJournee(moyennes);
-    
+
+    t2 = clock();
+    timeExec = (t2 - t1)/(CLOCKS_PER_SEC / (double) 1000.0);
+    cout<<"Temps de calcul de l'inde ATMO : " << timeExec<<endl;
+   
     return indice;
 }
 
@@ -45,36 +61,55 @@ int Service::trouverCapteurDef(string id)
 {
     DAO dao;
     int res = 0;
+    clock_t t1, t2;
+    double timeMem=0, timeExec=0;
+
+    t1 = clock();
     Sensor evaluatedSensor = dao.trouverCapteurParId(id);
+    t2 = clock();
+    timeMem += (t2 - t1)/(CLOCKS_PER_SEC / (double) 1000.0);
     vector<Sensor> vectorSensor;
     vectorSensor.push_back(evaluatedSensor);
 
     //On trouve les voisins du capteur
     double rayon = 10.0;
     vector<Sensor> listeneighs;
+    t1 = clock();
     while(listeneighs.size() < 5){
         listeneighs = dao.selectionnerCapteur(evaluatedSensor.getLatitude(), evaluatedSensor.getLongitude(), rayon);
         rayon += 10.0;
     }
-    
+    t2 =  clock(); 
+    timeMem += (t2 - t1)/(CLOCKS_PER_SEC / (double) 1000.0);  
+
     string lastdate = "2019-12-";
     int lastday = 31;
     string currentDate = lastdate + to_string(lastday);
     double ecartalamoyenne = 0;
-
     /*Récompenser les particuliers*/
     vector<Particulier> particuliers = dao.obtenirParticuliers();
 
     //On calcule l'ecart a la moyenne pendant les derniers 7 jours
     while(lastday > 24){
+	t1 = clock();
         vector<Mesure> mesuresVoisins = dao.obtenirBonneMesure(currentDate, listeneighs);
+	t2=clock();
+	timeMem += (t2 - t1)/(CLOCKS_PER_SEC / (double) 1000.0);
 
         /*Récompenser les particuliers*/
         recompenserParticuliers(particuliers, mesuresVoisins);
 
+	t1 = clock();
         map<string, double> moyennesMesuresVoisins = calculerMoyenneParElement(mesuresVoisins);
-        vector<Mesure> mesuresCapteurTeste = dao.obtenirBonneMesure(currentDate, vectorSensor);
+	t2 = clock();
+	timeExec += (t2 - t1)/(CLOCKS_PER_SEC / (double) 1000.0);
 
+	t1 = clock();     
+	vector<Mesure> mesuresCapteurTeste = dao.obtenirBonneMesure(currentDate, vectorSensor);
+	t2 = clock();
+	timeMem += (t2 - t1)/(CLOCKS_PER_SEC / (double) 1000.0);
+
+	t1 = clock();
         vector<Mesure>::iterator it;
         for(it = mesuresCapteurTeste.begin(); it<mesuresCapteurTeste.end(); it++){
             if(it->getAttribut().getID()=="O3"){
@@ -90,12 +125,16 @@ int Service::trouverCapteurDef(string id)
             }
         }
         lastday--;
+	t2 = clock();
+	timeExec += (t2 - t1)/(CLOCKS_PER_SEC / (double) 1000.0);
     }
     //C'est le capteur 36 qui ne marche pas
     if(ecartalamoyenne>SEUIL){
         res = 1;
     }
 
+	cout<<"Temps en mémoire : " << timeMem<<endl;
+	cout<<"Temps de calcul : " << timeExec<<endl;
     return res;
 }
 
