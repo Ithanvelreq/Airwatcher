@@ -46,6 +46,7 @@ void setDescription(string desc);
 
 	Attribut(const Attribut & attribut);
 	//Constructeur par copie de la classe Attribut
+	
 	Attribut();
 
 	~Attribut();

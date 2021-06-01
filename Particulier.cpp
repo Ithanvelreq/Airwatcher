@@ -28,6 +28,9 @@ using namespace std;
 //-------------------------------------------------------- Fonctions amies
 
 //----------------------------------------------------- Méthodes publiques
+void Particulier::addSensor(Sensor sensor){
+    listeSensor.push_back(sensor);
+}
 vector<Sensor> Particulier:: getListe(){
     return listeSensors;
 }//----- Fin de getListe()

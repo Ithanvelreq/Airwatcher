@@ -181,10 +181,10 @@ map<string, double> Service::calculerMoyenneParElement(vector<Mesure> mesures){
 void Service::recompenserParticuliers(vector<Particulier> particuliers, vector<Mesure> mesures){
 	for(int i=0; i<mesures.size(); i++){
 		for(int j=0; j<particuliers.size(); j++){
-			for(int k=0; k<particuliers[j].getSensors().size(); k++){
-				if(particuliers[j].getSensors()[k].getID() == mesures[i].getSensorID() ){
-					particuliers[j].setPoints(getPoints()+1);
-					cout << "Le particulier "<<particuliers[j].id<<" se voit attribuer un point en plus, pour un total de "<<particuliers[j].getPoints()/*particuliers[j].points*/<<endl;
+			for(int k=0; k<particuliers[j].getListe().size(); k++){
+				if(particuliers[j].getListe()[k].getID() == mesures[i].getSensorID() ){
+					particuliers[j].setPoint(getPoint()+1);
+					cout << "Le particulier "<<particuliers[j].id<<" se voit attribuer un point en plus, pour un total de "<<particuliers[j].getPoint()/*particuliers[j].points*/<<endl;
 				}
 			}
 		}

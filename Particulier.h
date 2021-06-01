@@ -43,6 +43,8 @@ public:
 
     void setBanni(int b);
 
+    void addSensor(Sensor sensor);
+
 //-------------------------------------------- Constructeurs - destructeur
     Particulier(string id, vector<Sensor> liste);
     // Constructeur de la classe Particulier

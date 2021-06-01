@@ -40,7 +40,7 @@ double getValue();
 Attribut getAttribut();
 
 //-------------------------------------------- Constructeurs - destructeur
-	Mesure(string d, string capteur, double valeur, Attribut attribut);
+	Mesure(string d, string capteur, double valeur, const Attribut & attribut);
 	//Constructeur de la classe Mesure
 
 	~Mesure();

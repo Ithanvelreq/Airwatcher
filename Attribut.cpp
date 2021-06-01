@@ -56,7 +56,9 @@ Attribut::Attribut(string id, string u, string desc)
 } //----- Fin de Attribut
 
 Attribut::Attribut(const Attribut & attribut){
-
+	attributID = attribut.attributID;
+	unite = attribut.unite;
+	description = attribut.description;
 }//------ Fin de Attribut par copie
 
 Attribut::Attribut(){
