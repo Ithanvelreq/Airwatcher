@@ -74,7 +74,7 @@ protected:
 private:
 //------------------------------------------------------- M�thodes priv�es
 map<string, double> calculerMoyenneParElement(vector<Mesure> mesures);
-void recompenserParticuliers(vector<Particulier> particuliers, vector<Mesure> mesures);
+void recompenserParticuliers(vector<Particulier> & particuliers, vector<Mesure> mesures);
     // type M�thode ( liste de param�tres );
     // Mode d'emploi :
     //

@@ -53,7 +53,11 @@ int main()
 
             if(lat!=404 && lon!=404 && rayon>=0 && date!="x"){
                 pair<string, int> res = service.trouverIndiceAtmo(lat, lon, rayon, date);
-                cout << "l'indice ATMO de la journee est " << res.second << " et c'est l'element " << res.first << " qui sature"<< endl;
+                if(res.first!=""){
+                    cout << "l'indice ATMO de la journee est " << res.second << " et c'est l'element " << res.first << " qui sature"<< endl;
+                }else{
+                    cout << "Il n'y a pas des capteurs dans la zone choisie pour le creneau choisi, veuillez ressayer svp" << endl;
+                }
             }else if (lat==404 || lon==404){
                 cout << "Votre saisie comporte des erreurs, veuillez verifier que les coordonnees soient valides" << endl;
             }else if(rayon<=0){
@@ -91,7 +95,7 @@ int main()
             cout << "La commande saisie ne corresponds pas aux options disponibles, veuillez ressayer svp" << endl;
         }
     }
-    cout << "fini" << endl;
+    cout << "Au revoir!" << endl;
     delete [] command;
     delete [] strdate;
     delete [] strlat;

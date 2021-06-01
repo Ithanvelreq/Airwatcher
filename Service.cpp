@@ -36,7 +36,6 @@ pair<string, int> Service::trouverIndiceAtmo(double latitude, double longitude, 
     /*Récompenser les particuliers*/
 	vector<Particulier> particuliers = dao.obtenirParticuliers();
 	recompenserParticuliers(particuliers, mesures);
-
     pair<string, int> indice = indiceDeLaJournee(moyennes);
     
     return indice;
@@ -63,12 +62,14 @@ int Service::trouverCapteurDef(string id)
     string currentDate = lastdate + to_string(lastday);
     double ecartalamoyenne = 0;
 
+    /*Récompenser les particuliers*/
+    vector<Particulier> particuliers = dao.obtenirParticuliers();
+
     //On calcule l'ecart a la moyenne pendant les derniers 7 jours
     while(lastday > 24){
         vector<Mesure> mesuresVoisins = dao.obtenirBonneMesure(currentDate, listeneighs);
 
         /*Récompenser les particuliers*/
-        vector<Particulier> particuliers = dao.obtenirParticuliers();
         recompenserParticuliers(particuliers, mesuresVoisins);
 
         map<string, double> moyennesMesuresVoisins = calculerMoyenneParElement(mesuresVoisins);
@@ -184,7 +185,7 @@ map<string, double> Service::calculerMoyenneParElement(vector<Mesure> mesures){
 
 }//----- Fin de M�thode
 
-void Service::recompenserParticuliers(vector<Particulier> particuliers, vector<Mesure> mesures){
+void Service::recompenserParticuliers(vector<Particulier> & particuliers, vector<Mesure> mesures){
 	for(int i=0; i<mesures.size(); i++){
 		for(int j=0; j<particuliers.size(); j++){
 			for(int k=0; k<particuliers[j].getListe().size(); k++){
@@ -213,7 +214,7 @@ pair<string, int> Service::indiceDeLaJournee(map<string, double> moyennes)
     map<string, double>::iterator it;
     int indiceCourrant = 1;
     int indiceFinal = 1;
-    string elementfinal;
+    string elementfinal="";
     int fini = 0;
     for(it = moyennes.begin(); it!=moyennes.end(); it++){
         while(!fini){
