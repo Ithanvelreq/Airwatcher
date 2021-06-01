@@ -1,5 +1,6 @@
 CC=g++
 CFLAGS=
+#change for Maintest if you want to test the app
 EXEC=Main
 
 $(EXEC): Service.o Admin.o Gouvernement.o Provider.o Purificateur.o $(EXEC).o
