@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstring>
+#include "Service.h"
 using namespace std;
 
 void rappelCommandes();
@@ -20,6 +21,7 @@ int main()
     double lon;
     double rayon;
     string date;
+    Service service;
 
 
     cout << "Bienvenu dans l'application Airwathcher"<< endl << "Auteurs: Mdarhri Marion Fabregues Velarde" << endl;
@@ -43,20 +45,10 @@ int main()
             lon = obtenirCoord(strlon, 2);
             rayon = obtenirRayon(strR);
             date = obtenirDate(strdate);
-            //cout<<date<<endl;
 
-            cout << "lat" << lat << " lon "<<lon<<" R "<< rayon<< " date "<< date <<endl;
-            /*if (date!= nullptr){
-                date->display();
-            }else{
-                cout << "probleme avec la date" << endl;
-            }*/
-
-
-            //pour l'instant affiche -1 si il y a un probleme lors de la saisie
             if(lat!=404 && lon!=404 && rayon>=0 && date!="x"){
-                //pas de soucis, tout est respecte on peux appeler la methode
-                // if not null
+                pair<string, int> res = service.trouverIndiceAtmo(lat, lon, rayon, date);
+                cout << "l'indice ATMO de la journee est " << res.second << " et c'est l'element " << res.first << " qui sature"<< endl;
             }else if (lat==404 || lon==404){
                 cout << "Votre saisie comporte des erreurs, veuillez verifier que les coordonnees soient valides" << endl;
             }else if(rayon<=0){
