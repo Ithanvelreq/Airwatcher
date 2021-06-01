@@ -11,12 +11,17 @@
 
 //--------------------------------------------------- Interfaces utilis�es
 #include "Mesure.h"
+#include "Sensor.h"
+#include "Attribut.h"
+#include "Particulier.h"
 #include <string>
 #include <iostream>
 #include <cmath>
 #include <fstream>
 #include "vector"
+#include "map"
 #include "Mesure.h"
+#include "Sensor.h"
 #include <algorithm>
 #define PI 3.141592
 using namespace std;
@@ -36,9 +41,11 @@ class DAO
 
 public:
 //----------------------------------------------------- M�thodes publiques
-    vector<string> selectionnerCapteur(double latitude,double longitude,double rayon);
-    vector<Mesure> obtenirBonneMesure(string dateAtt,vector<string> capteurs);
-
+    vector<Sensor> selectionnerCapteur(double latitude,double longitude,double rayon);
+    vector<Mesure> obtenirBonneMesure(string dateAtt,vector<Sensor> capteurs);
+    Sensor trouverCapteurParId(string id);
+    Attribut chercherAttributParId(string attributeID);
+    vector<Particulier> obtenirParticuliers();
     
     // Mode d'emploi :
     //

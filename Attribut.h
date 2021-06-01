@@ -36,10 +36,17 @@ public:
 string getID();
 string getUnite();
 string getDescription();
+void setID(string id);
+void setUnite(string unit);
+void setDescription(string desc);
 
 //-------------------------------------------- Constructeurs - destructeur
 	Attribut(string id, string u, string desc);
 	//Constructeur de la classe Attribut
+
+	Attribut(const Attribut & attribut);
+	//Constructeur par copie de la classe Attribut
+	Attribut();
 
 	~Attribut();
 	//Destructeur de la classe Attribut

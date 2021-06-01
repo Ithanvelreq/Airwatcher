@@ -15,14 +15,8 @@ using namespace std;
 
 //------------------------------------------------------ Include personnel
 #include "DAO.h"
-#include <iostream>
-#include <cmath>
-#include <fstream>
 #include "vector"
-#include <string>
-#include <algorithm>
 #define PI 3.141592
-using namespace std;
 //------------------------------------------------------------- Constantes
 
 //---------------------------------------------------- Variables de classe
@@ -34,10 +28,10 @@ using namespace std;
 //-------------------------------------------------------- Fonctions amies
 
 //----------------------------------------------------- M�thodes publiques
-vector<string> DAO::selectionnerCapteur(double latitude,double longitude,double rayon){
+vector<Sensor> DAO::selectionnerCapteur(double latitude,double longitude,double rayon){
     //récupère l'id des sensors qui nous intéresse qui sont dans le rayon demande
     ifstream capteur ("../dataset/sensors.csv");  //Ouverture d'un fichier en lecture
-    vector<string> listecapteur;
+    vector<Sensor> listecapteur;
     if(capteur) {
         //Tout est prêt pour la lecture.
         string ligne;
@@ -69,9 +63,10 @@ vector<string> DAO::selectionnerCapteur(double latitude,double longitude,double 
 
             lat = atof(lat1.c_str());
             longi = atof(lon1.c_str());
+            Sensor sensor(sensorID, lat, longi);
 
             if(distanceEntre2points(lat,longi,latitude,longitude)<rayon){
-                listecapteur.push_back(sensorID);
+                listecapteur.push_back(sensor);
             }
         }
     }
@@ -86,7 +81,7 @@ vector<string> DAO::selectionnerCapteur(double latitude,double longitude,double 
 //remplacer date par Time stamp?
 //vector<string> listecapteurs ,string date
 //vector<Mesure> obtenirBonneMesure(){
-vector<Mesure> DAO::obtenirBonneMesure(string dateAtt,vector<string> capteurs){
+vector<Mesure> DAO::obtenirBonneMesure(string dateAtt,vector<Sensor> capteurs){
     ifstream mesurecsv("../dataset/measurements.csv");
     string ligne;
     vector<Mesure> mesures;
@@ -119,7 +114,7 @@ vector<Mesure> DAO::obtenirBonneMesure(string dateAtt,vector<string> capteurs){
             int test=0;
 
             for(int i(0); i<capteurs.size(); ++i) {
-                if(sensorID==capteurs[i]){
+                if(sensorID==capteurs[i].getSensorID()){
                     test++;
                 }
             }
@@ -140,7 +135,8 @@ vector<Mesure> DAO::obtenirBonneMesure(string dateAtt,vector<string> capteurs){
             }
 
            value= atof(value1.c_str());
-            Mesure mesure(date, sensorID, attributeID, value);
+            Attribut attribut = chercherAttributParId(attributeID);
+            Mesure mesure(date, sensorID, value, attribut);
             mesures.push_back(mesure);
         }
 
@@ -157,6 +153,135 @@ vector<Mesure> DAO::obtenirBonneMesure(string dateAtt,vector<string> capteurs){
     return mesures;
 }//Fin de la methode
 
+//Chercher un attribut à partir de son ID
+Attribut DAO::chercherAttributParId(string AttributeID){
+	ifstream attributCSV("../dataset/attributes.csv");
+	string ligne;
+	Attribut attribut;
+	if(attributCSV){
+		while(getline(attributCSV, ligne)){
+			string::iterator it = ligne.begin();
+			string attID;
+			while (*it != ';') {
+				attID.insert(attID.end(), *it);
+		        	it++;
+		    	}
+			it++;
+			if(attID!=AttributeID){
+		        	continue;
+		    	}
+			string unit;
+			while (*it != ';') {
+				unit.insert(unit.end(), *it);
+		        	it++;
+		    	}
+			it++;
+			string description;
+			while (*it != ';') {
+				description.insert(description.end(), *it);
+		        	it++;
+		    	}
+			attribut.setID(attID);
+			attribut.setUnite(unit);
+			attribut.setDescription(description);
+		}
+	}else{
+		cout << "ERREUR: Impossible d'ouvrir le fichier en lecture." << endl;
+	}
+	return attribut;
+}
+
+Sensor DAO::trouverCapteurParId(string idCapteur){
+    ifstream capteur ("../dataset/sensors.csv");  //Ouverture d'un fichier en lecture
+    Sensor sensor;
+    if(capteur) {
+        //Tout est prêt pour la lecture.
+        string ligne;
+        while (getline(capteur, ligne)) //Tant qu'on n'est pas à la fin, on lit
+        {
+            //On lit une ligne complète
+            string::iterator it = ligne.begin();
+            string sensorID;
+            double lat;
+            double longi;
+            while (*it != ';') {
+                sensorID.insert(sensorID.end(), *it);
+                it++;
+            }
+            if(sensorID != idCapteur){
+                continue;
+            }
+            it++;
+            string lat1;
+            while (*it != ';') {
+
+                lat1.insert(lat1.end(), *it);
+                it++;
+            }
+            it++;
+            string lon1;
+            while (*it != ';') {
+
+                lon1.insert(lon1.end(), *it);
+                it++;
+            }
+
+            lat = atof(lat1.c_str());
+            longi = atof(lon1.c_str());
+
+            sensor.setID(sensorID);
+	        sensor.setLatitude(lat);
+	        sensor.setLongitude(longi);
+        }
+    }
+    else
+    {
+        cout << "ERREUR: Impossible d'ouvrir le fichier en lecture." << endl;
+    }
+	return sensor;
+}//Fin de la methode
+
+//Retourne la liste de tous les particuliers
+vector<Particulier> DAO::obtenirParticuliers(){
+	vector<Particulier> particuliers;
+	ifstream usersCSV("../dataset/users.csv");
+	string ligne;
+	if(usersCSV){
+		while(getline(usersCSV, ligne)){
+			string userID;
+			string sensorID;
+			string::iterator it = ligne.begin();
+			while(*it != ';'){
+				userID.insert(userID.end(), *it);
+				it++;
+			}
+			it++;			
+			while (*it != ';'){
+				sensorID.insert(sensorID.end(), *it);
+				it++;
+			}
+			int exist =0;
+			for(int i=0; i<particuliers.size(); i++){
+				if(userID == particuliers[i].getID() ){
+					Sensor sensor = trouverCapteurParId(sensorID); 
+					particuliers[i].addSensor(sensor);
+					exist=1;
+					break;
+				}
+			}
+			if(!exist){
+				Sensor sensor = trouverCapteurParId(sensorID); 
+				vector<Sensor> capteurs;
+				capteurs.push_back(sensor);
+				Particulier particulier(userID, capteurs);
+				particuliers.push_back(particulier);
+			}
+		}
+	}else{
+		cout<<	 "ERREUR: Impossible d'ouvrir le fichier en lecture." << endl;
+	}
+	return particuliers;		
+}//Fin de la methode
 
 //------------------------------------------------- Surcharge d'op�rateurs
 //-------------------------------------------- Constructeurs - destructeur
@@ -215,4 +340,7 @@ double DAO::distanceEntre2points(double lat_a_degre, double lon_a_degre, double 
 
     return h;
 }
+
+
+
 

@@ -11,6 +11,7 @@
 #if ! defined ( MESURE_H )
 #define MESURE_H
 //--------------------------------------------------- Interfaces utilisées
+#include "Attribut.h"
 #include <string>
 #include <iostream>
 using namespace std;
@@ -35,11 +36,11 @@ public:
 
 string getDate();
 string getSensorID();
-string getAttributeID();
 double getValue();
+Attribut getAttribut();
 
 //-------------------------------------------- Constructeurs - destructeur
-	Mesure(string d, string capteur, string attribut, double valeur);
+	Mesure(string d, string capteur, double valeur, Attribut attribut);
 	//Constructeur de la classe Mesure
 
 	~Mesure();
@@ -54,7 +55,7 @@ protected:
 
 	string date;
 	string sensorID;
-	string attributeID;
+	Attribut typeMesure;
 	double value;
 
 //-------------------------------- Autres définitions dépendantes de <Mesure>

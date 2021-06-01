@@ -11,7 +11,6 @@
 #if ! defined ( PURIFICATEUR_H )
 #define PURIFICATEUR_H
 //--------------------------------------------------- Interfaces utilisées
-#include "Timestamp.h"
 #include <string>
 using namespace std;
 //------------------------------------------------------------- Constantes
@@ -36,12 +35,12 @@ public:
 string getPurificateurID();
 double getLatitude();
 double getLongitude();
-Timestamp * getStart();
-Timestamp * getStop();
+string getStart();
+string getStop();
 
 
 //-------------------------------------------- Constructeurs - destructeur
-	Purificateur(string id, double la, double lo, Timestamp * start, Timestamp * stop);
+	Purificateur(string id, double la, double lo, string start, string stop);
 	//Constructeur de la classe Purificateur
 
 	~Purificateur();
@@ -57,8 +56,8 @@ protected:
 	string purificateurID;
 	double latitude;
 	double longitude;
-	Timestamp * startTimestamp;
-	Timestamp * stopTimestamp;
+	string startTimestamp;
+	string stopTimestamp;
 
 //-------------------------------- Autres définitions dépendantes de <Purificateur>
 };

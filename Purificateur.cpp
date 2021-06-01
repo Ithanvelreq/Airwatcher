@@ -15,7 +15,6 @@
 
 //------------------------------------------------------ Include personnel
 #include "Purificateur.h"
-#include "Timestamp.h"
 using namespace std;
 //------------------------------------------------------------- Constantes
 //----------------------------------------------------------------- PUBLIC
@@ -30,17 +29,17 @@ double Purificateur::getLatitude(){
 double Purificateur::getLongitude(){
 	return longitude;
 }
-Timestamp * Purificateur::getStart(){
+string Purificateur::getStart(){
 	return startTimestamp;
 }
-Timestamp * Purificateur::getStop(){
+string Purificateur::getStop(){
 	return stopTimestamp;
 }
 
 
 //-------------------------------------------- Constructeurs - destructeur
 
-Purificateur::Purificateur(string id, double la, double lo, Timestamp * start, Timestamp * stop)
+Purificateur::Purificateur(string id, double la, double lo, string start, string stop)
 {
 	#ifdef MAP
 		cout << "Appel au constructeur de <Purificateur>" << endl;

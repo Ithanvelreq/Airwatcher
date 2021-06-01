@@ -33,6 +33,15 @@ string Attribut::getDescription(){
 	return description;
 }
 
+void Attribut::setID(string id){
+	attributID = id;
+}
+void Attribut::setUnite(string unit){
+	unite = unit;
+}
+void Attribut::setDescription(string desc){
+	description = desc;
+}
 
 //-------------------------------------------- Constructeurs - destructeur
 
@@ -46,6 +55,13 @@ Attribut::Attribut(string id, string u, string desc)
 	description = desc;
 } //----- Fin de Attribut
 
+Attribut::Attribut(const Attribut & attribut){
+
+}//------ Fin de Attribut par copie
+
+Attribut::Attribut(){
+
+}//------ Fin de Attribut par defaut
 
 Attribut::~Attribut()
 {	

@@ -15,7 +15,6 @@
 
 //------------------------------------------------------ Include personnel
 #include "Sensor.h"
-#include "Timestamp.h"
 using namespace std;
 //------------------------------------------------------------- Constantes
 //----------------------------------------------------------------- PUBLIC
@@ -30,7 +29,15 @@ double Sensor::getLatitude(){
 double Sensor::getLongitude(){
 	return longitude;
 }
-
+void Sensor::setID(string id){
+	sensorID = id;
+}
+void Sensor::setLatitude(double la){
+	latitude = la;
+}
+void Sensor::setLongitude(double lo){
+	longitude = lo;
+}
 //-------------------------------------------- Constructeurs - destructeur
 
 Sensor::Sensor(string id, double la, double lo)
@@ -43,6 +50,9 @@ Sensor::Sensor(string id, double la, double lo)
 	longitude = lo;
 } //----- Fin de Sensor
 
+Sensor::Sensor(){
+	
+}
 
 Sensor::~Sensor()
 {	
