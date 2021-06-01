@@ -37,7 +37,7 @@ public:
 string getDate();
 string getSensorID();
 double getValue();
-Attribut getAttribut();
+Attribut & getAttribut();
 
 //-------------------------------------------- Constructeurs - destructeur
 	Mesure(string d, string capteur, double valeur, const Attribut & attribut);

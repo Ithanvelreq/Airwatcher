@@ -29,7 +29,7 @@ using namespace std;
 
 //----------------------------------------------------- Méthodes publiques
 void Particulier::addSensor(Sensor sensor){
-    listeSensor.push_back(sensor);
+    listeSensors.push_back(sensor);
 }
 vector<Sensor> Particulier:: getListe(){
     return listeSensors;
@@ -58,7 +58,6 @@ void Particulier:: setBanni(int b){
 //-------------------------------------------- Constructeurs - destructeur
 Particulier::Particulier(string id, vector<Sensor> liste):Utilisateur(id)
 {
-    cout << "constructeur particulier"<<endl;
     #ifdef MAP
         cout << "Appel au constructeur de <Particulier>" << endl;
     #endif

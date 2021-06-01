@@ -260,7 +260,7 @@ vector<Particulier> DAO::obtenirParticuliers(){
 			}
 			int exist =0;
 			for(int i=0; i<particuliers.size(); i++){
-				if(userID == particuliers[i].getID() ){
+				if(userID == particuliers[i].getId() ){
 					Sensor sensor = trouverCapteurParId(sensorID); 
 					particuliers[i].addSensor(sensor);
 					exist=1;

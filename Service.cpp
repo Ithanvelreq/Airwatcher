@@ -49,6 +49,8 @@ int Service::trouverCapteurDef(string id)
     Sensor evaluatedSensor = dao.trouverCapteurParId(id);
     vector<Sensor> vectorSensor;
     vectorSensor.push_back(evaluatedSensor);
+
+    //On trouve les voisins du capteur
     double rayon = 10.0;
     vector<Sensor> listeneighs;
     while(listeneighs.size() < 5){
@@ -56,19 +58,24 @@ int Service::trouverCapteurDef(string id)
         rayon += 10.0;
     }
     
-    string lastdate = "-31-2019";
-    int lastday = 12;
-    string currentDate = to_string(lastday) + lastdate;
+    string lastdate = "2019-12-";
+    int lastday = 31;
+    string currentDate = lastdate + to_string(lastday);
     double ecartalamoyenne = 0;
+
     //On calcule l'ecart a la moyenne pendant les derniers 7 jours
-    while(lastday < 20){
-        map<string, double> moyennesMesuresVoisins = calculerMoyenneParElement(dao.obtenirBonneMesure(currentDate, listeneighs));
-        vector<Mesure> mesuresCapteur = dao.obtenirBonneMesure(currentDate, vectorSensor);
+    while(lastday > 24){
+        vector<Mesure> mesuresVoisins = dao.obtenirBonneMesure(currentDate, listeneighs);
+
+        /*Récompenser les particuliers*/
+        vector<Particulier> particuliers = dao.obtenirParticuliers();
+        recompenserParticuliers(particuliers, mesuresVoisins);
+
+        map<string, double> moyennesMesuresVoisins = calculerMoyenneParElement(mesuresVoisins);
+        vector<Mesure> mesuresCapteurTeste = dao.obtenirBonneMesure(currentDate, vectorSensor);
+
         vector<Mesure>::iterator it;
-        //recompenserUtilisateurPrivee(mesures)
-
-        for(it = mesuresCapteur.begin(); it<mesuresCapteur.end(); it++){
-
+        for(it = mesuresCapteurTeste.begin(); it<mesuresCapteurTeste.end(); it++){
             if(it->getAttribut().getID()=="O3"){
                 ecartalamoyenne += abs(it->getValue() - moyennesMesuresVoisins.find("O3")->second);
             }else if(it->getAttribut().getID()=="NO2"){
@@ -81,9 +88,9 @@ int Service::trouverCapteurDef(string id)
                 ecartalamoyenne += abs(it->getValue() - moyennesMesuresVoisins.find("PM10")->second);
             }
         }
-        lastday++;
+        lastday--;
     }
-
+    //C'est le capteur 36 qui ne marche pas
     if(ecartalamoyenne>SEUIL){
         res = 1;
     }
@@ -168,7 +175,6 @@ map<string, double> Service::calculerMoyenneParElement(vector<Mesure> mesures){
     double moyenneNo2=sommeNO2/nbNO2;
     double moyenneSO2=sommeSO2/nbSO2;
     double moyennePM10=sommePm10/nbPM0;
-    map<string, double> res;
     res.insert(pair<string, double>("O3", moyenneO3));
     res.insert(pair<string, double>("NO2", moyenneNo2));
     res.insert(pair<string, double>("SO2", moyenneSO2));
@@ -182,9 +188,9 @@ void Service::recompenserParticuliers(vector<Particulier> particuliers, vector<M
 	for(int i=0; i<mesures.size(); i++){
 		for(int j=0; j<particuliers.size(); j++){
 			for(int k=0; k<particuliers[j].getListe().size(); k++){
-				if(particuliers[j].getListe()[k].getID() == mesures[i].getSensorID() ){
-					particuliers[j].setPoint(getPoint()+1);
-					cout << "Le particulier "<<particuliers[j].id<<" se voit attribuer un point en plus, pour un total de "<<particuliers[j].getPoint()/*particuliers[j].points*/<<endl;
+				if(particuliers[j].getListe()[k].getSensorID() == mesures[i].getSensorID() ){
+					particuliers[j].setPoint(particuliers[j].getPoint()+1);
+					cout << "Le particulier "<<particuliers[j].getId()<<" se voit attribuer un point en plus, pour un total de "<<particuliers[j].getPoint()/*particuliers[j].points*/<<endl;
 				}
 			}
 		}
@@ -211,16 +217,12 @@ pair<string, int> Service::indiceDeLaJournee(map<string, double> moyennes)
     int fini = 0;
     for(it = moyennes.begin(); it!=moyennes.end(); it++){
         while(!fini){
-            cout << "seuil saturation" << listeIndices.find(it->first)->second.back()<< endl;
-            cout << "actuel encadrement" << listeIndices.find(it->first)->second[indiceCourrant-1] << " ; " << listeIndices.find(it->first)->second[indiceCourrant] << endl;
             if(it->second >= listeIndices.find(it->first)->second.back()){
                 //saturation
                 fini = 1;
-                cout << "saturation" << it->first << "  " << it->second << "  " << indiceCourrant << endl;
             }else if(it->second>=listeIndices.find(it->first)->second[indiceCourrant-1] && it->second<=listeIndices.find(it->first)->second[indiceCourrant]){
                 //on a trouve l'encadrement
                 fini = 1;
-                cout << "encadrement" << it->first << "  " << it->second  << "  " << indiceCourrant << endl;
             }
 
             if(fini && indiceCourrant>indiceFinal){
@@ -232,5 +234,5 @@ pair<string, int> Service::indiceDeLaJournee(map<string, double> moyennes)
         fini = 0;
         indiceCourrant = 1;
     }
-    return pair<string, int>(elementfinal, indiceFinal)
+    return pair<string, int>(elementfinal, indiceFinal);
 }//----- Fin de M�thode

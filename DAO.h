@@ -20,8 +20,6 @@
 #include <fstream>
 #include "vector"
 #include "map"
-#include "Mesure.h"
-#include "Sensor.h"
 #include <algorithm>
 using namespace std;
 //------------------------------------------------------------- Constantes
