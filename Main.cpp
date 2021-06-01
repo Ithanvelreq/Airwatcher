@@ -1,16 +1,12 @@
 #include <iostream>
 #include <cstring>
-#include "Timestamp.h"
 using namespace std;
 
 void rappelCommandes();
-Timestamp* obtenirDate(char * strdate);
+string obtenirDate(char * strdate);
 double obtenirCoord(char * strcoord, int latoulong /** 1 pour latiude et 2 pour longitude*/);
 double obtenirRayon(char * strray);
-typedef struct timestamp{
 
-
-}timestamp;
 
 int main()
 {
@@ -23,7 +19,7 @@ int main()
     double lat;
     double lon;
     double rayon;
-    Timestamp *date;
+    string date;
 
 
     cout << "Bienvenu dans l'application Airwathcher"<< endl << "Auteurs: Mdarhri Marion Fabregues Velarde" << endl;
@@ -47,21 +43,22 @@ int main()
             lon = obtenirCoord(strlon, 2);
             rayon = obtenirRayon(strR);
             date = obtenirDate(strdate);
+            //cout<<date<<endl;
 
-            cout << "lat" << lat << " lon "<<lon<<" R "<< rayon<< " date ";
-            if (date!= nullptr){
+            cout << "lat" << lat << " lon "<<lon<<" R "<< rayon<< " date "<< date <<endl;
+            /*if (date!= nullptr){
                 date->display();
             }else{
                 cout << "probleme avec la date" << endl;
-            }
+            }*/
 
 
             //pour l'instant affiche -1 si il y a un probleme lors de la saisie
-            if(lat>0 && lon > 0 && rayon>0 && date!=nullptr){
+            if(lat!=404 && lon!=404 && rayon>=0 && date!="x"){
                 //pas de soucis, tout est respecte on peux appeler la methode
-                delete date; // if not null
-            }else if (lat<=0 || lon <= 0){
-                cout << "Votre saisie comporte des erreurs, veuillez verifier que les coordonnes soient valides" << endl;
+                // if not null
+            }else if (lat==404 || lon==404){
+                cout << "Votre saisie comporte des erreurs, veuillez verifier que les coordonnees soient valides" << endl;
             }else if(rayon<=0){
                 cout << "Le rayon doit etre superieur a 0!" << endl;
             }else{
@@ -124,12 +121,13 @@ double obtenirRayon(char * strray){
     return res;
 }
 
-Timestamp* obtenirDate(char * strdate){
+string obtenirDate(char * strdate){
     string s(strdate);
     string syear = s.substr(0, 4);
     string smonth = s.substr(5, 2);
     string sday = s.substr(8, 2);
-    Timestamp *res;
+    string res;
+    
     
 
     int year;
@@ -156,9 +154,9 @@ Timestamp* obtenirDate(char * strdate){
     }
 
     if(year != -1 && month != -1 && day != -1){
-        res = new Timestamp(year, month, day);
+        res = syear+"-"+smonth+"-"+sday;
     }else{
-        res = nullptr;
+        res = "x";
     }
     
     return res;
