@@ -1,57 +1,54 @@
 /*************************************************************************
-                           Utilisateur  -  description
+                           Provider  -  description
                              -------------------
     début                : 31/05/2021
     copyright            : (C) 2021 par VELARDE REQUENA/MDARHRI/MARION/FABREGUES
 *************************************************************************/
 
-//---------- Interface de la classe <Utilisateur> (fichier Utilisateur.h) ------
-#ifndef DEF_utilisateur
-#define DEF_utilisateur
+//---------- Interface de la classe <Provider> (fichier Provider.h) ------
+#ifndef DEF_prov
+#define DEF_prov
 
 //--------------------------------------------------- Interfaces utilisées
 #include <iostream>
 #include <string>
+#include <vector>
+#include "Utilisateur.h"
+#include "Purificateur.h"
 //------------------------------------------------------------- Constantes 
 
 //------------------------------------------------------------------ Types 
 
 //------------------------------------------------------------------------ 
-// Rôle de la classe <Utilisateur>
-//classe abstraite qui définit un utilisateur
+// Rôle de la classe <Provider>
+//classe abstraite fille de Utilisateur qui définit un Provider (fournisseur de purificateur)
 //
 //------------------------------------------------------------------------ 
 
-class Utilisateur
+class Provider : public Utilisateur
 {
 //----------------------------------------------------------------- PUBLIC
 
 public:
 //----------------------------------------------------- Méthodes publiques
-    string getId();
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
+    vector<Purificateur> getListe();
+
+    void setListe (vector<Purificateur> liste);
 
 
 //-------------------------------------------- Constructeurs - destructeur
-    Utilisateur(string id, string mdp="", string email="", string n="", string p="");
-    // Constructeur de la classe Utilisateur
+    Provider(string id, vector<Purificateur> liste);
+    // Constructeur de la classe Provider
 
-    virtual ~Utilisateur();
-    // Destructeur de la classe Utilisateur
+    virtual ~Provider();
+    // Destructeur de la classe Provider
 
 //------------------------------------------------------------------ PRIVE 
 protected:
 //----------------------------------------------------- Attributs protégés
-    string userId;
-    string motDePasse;
-    string mail;
-    string nom;
-    string prenom;
+    vector<Purificateur> listePurifs;
 };
 
-//----------------------------------------- Types dépendants de <Utilisateur>
+//----------------------------------------- Types dépendants de <Provider>
 
-#endif // DEF_utilisateur
+#endif // DEF_prov
