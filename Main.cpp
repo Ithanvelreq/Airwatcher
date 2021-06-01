@@ -7,6 +7,8 @@ void rappelCommandes();
 string obtenirDate(char * strdate);
 double obtenirCoord(char * strcoord, int latoulong /** 1 pour latiude et 2 pour longitude*/);
 double obtenirRayon(char * strray);
+double obtenirNumSensor(char * strnumsensor);
+string obtenirIdSensor(double res, char * strnumsensor);
 
 
 int main()
@@ -17,10 +19,13 @@ int main()
     char * strlon = new char[taillecom];
     char * strR = new char[taillecom];
     char * strdate = new char[taillecom];
+    char * strnumsensor = new char[taillecom];
     double lat;
     double lon;
     double rayon;
     string date;
+    string idSensor;
+    double numSensor;
     Service service;
 
 
@@ -59,7 +64,26 @@ int main()
 
             
         }else if(!strcmp(command, "2")){
-            cout << "vous avez choisi 2" << endl;
+            cout << "Pour vérifier si un capteur est defectueux, veuillez entrer le numéro de ce capteur" << endl;
+	    cin.getline(strnumsensor, taillecom);
+	    numSensor = obtenirNumSensor(strnumsensor);
+	    if(numSensor>0){
+		idSensor = obtenirIdSensor(numSensor, strnumsensor); 
+		if(idSensor == ""){
+			cout << "Le numéro que vous avez entré ne correspond à aucun capteur" << endl; 
+            	}else{
+			//int def = service.trouverCapteurDef(idSensor);
+			int def = 1;
+			if(def){
+				cout << "Attention ! Ce capteur est defectueux" << endl;
+			}else{
+				cout << "Ce capteur n'est pas defectueux" <<endl;
+			}
+		}
+            }else{
+		cout << "Le format numéro positif n'a pas été respecté" <<endl;
+	    }
+            
         }else if(!strcmp(command, "help")){
             rappelCommandes();
         }else if(!strcmp(command, "exit")){
@@ -74,6 +98,8 @@ int main()
     delete [] strlat;
     delete [] strlon;
     delete [] strR;
+    delete [] strnumsensor;
+
     return 0;
 }
 
@@ -152,4 +178,27 @@ string obtenirDate(char * strdate){
     }
     
     return res;
+}
+
+double obtenirNumSensor(char * strnumsensor){
+	string s(strnumsensor);
+	double res;
+	try{
+		res = stof(s);
+	}catch(exception & e){
+		res = -1;
+	}
+	return res;
+}
+string obtenirIdSensor(double res, char * strnumsensor){
+	string s(strnumsensor);
+	string sensor = "sensor";
+	string idSensor;
+
+	if(res>=0 && res<=99){
+		idSensor = sensor + s;
+	}else{
+		idSensor = "";
+	}
+	return idSensor;
 }
