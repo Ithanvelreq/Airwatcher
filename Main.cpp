@@ -69,20 +69,19 @@ int main()
 	    numSensor = obtenirNumSensor(strnumsensor);
 	    if(numSensor>0){
 		idSensor = obtenirIdSensor(numSensor, strnumsensor); 
-		if(idSensor == ""){
-			cout << "Le numéro que vous avez entré ne correspond à aucun capteur" << endl; 
-            	}else{
-			//int def = service.trouverCapteurDef(idSensor);
-			int def = 1;
-			if(def){
-				cout << "Attention ! Ce capteur est defectueux" << endl;
-			}else{
-				cout << "Ce capteur n'est pas defectueux" <<endl;
-			}
-		}
+            if(idSensor == ""){
+                cout << "Le numéro que vous avez entré ne correspond à aucun capteur" << endl; 
             }else{
-		cout << "Le format numéro positif n'a pas été respecté" <<endl;
-	    }
+                int def = service.trouverCapteurDef(idSensor);
+                if(def){
+                    cout << "Attention ! Ce capteur est defectueux" << endl;
+                }else{
+                    cout << "Ce capteur n'est pas defectueux" <<endl;
+                }
+            }
+        }else{
+            cout << "Le format numéro positif n'a pas été respecté" <<endl;
+        }
             
         }else if(!strcmp(command, "help")){
             rappelCommandes();
@@ -192,7 +191,7 @@ double obtenirNumSensor(char * strnumsensor){
 }
 string obtenirIdSensor(double res, char * strnumsensor){
 	string s(strnumsensor);
-	string sensor = "sensor";
+	string sensor = "Sensor";
 	string idSensor;
 
 	if(res>=0 && res<=99){

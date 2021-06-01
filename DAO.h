@@ -1,8 +1,8 @@
 /*************************************************************************
                            DAO  -  description
                              -------------------
-    d�but                : ${date}
-    copyright            : (C) ${year} par ${user}
+    d�but                : 01/06/2021
+    copyright            : (C) 2021 Marion, Fabregues, Mdarhri, Velarde
 *************************************************************************/
 
 //---------- Interface de la classe <DAO> (fichier ${file_name}) ------

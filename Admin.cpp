@@ -40,8 +40,8 @@ Admin::Admin(string id):Utilisateur(id)
 
 Admin:: ~Admin()
 {
-#ifdef MAP
-    cout << "Appel au destructeur de <Admin>" << endl;
-#endif
+    #ifdef MAP
+        cout << "Appel au destructeur de <Admin>" << endl;
+    #endif
 } //----- Fin de ~Admin
 

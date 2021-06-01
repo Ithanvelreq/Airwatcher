@@ -1,8 +1,8 @@
 /*************************************************************************
                            Service  -  description
                              -------------------
-    d�but                : ${date}
-    copyright            : (C) ${year} par ${user}
+    d�but                : 01/06/2021
+    copyright            : (C) 2021 Marion, Fabregues, Mdarhri, Velarde
 *************************************************************************/
 
 //---------- R�alisation de la classe <Service> (fichier Service.cpp) --

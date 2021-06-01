@@ -1,6 +1,6 @@
 CC=g++
 CFLAGS=
-EXEC=main
+EXEC=Main
 
 $(EXEC): Service.o Admin.o Gouvernement.o Provider.o Purificateur.o $(EXEC).o
 	$(CC) -o $(EXEC) $(EXEC).o Admin.o Attribut.o DAO.o Gouvernement.o Mesure.o Particulier.o Provider.o Purificateur.o Sensor.o Service.o Utilisateur.o $(CFLAGS)
